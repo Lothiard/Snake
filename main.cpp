@@ -1,4 +1,6 @@
 #include <iostream>
+#include <conio.h>
+#include <time.h>
 
 using namespace std;
 
@@ -40,8 +42,16 @@ void Draw() {
 				cout << "#";
 			}
 
-			cout << " ";
-			
+			if (i == y && j == x) {
+				cout << "O";
+			}
+			else if (i == fruitY && j == fruitX) {
+				cout << "F";
+			}
+			else {
+				cout << " ";
+			}
+
 			if (j == width - 1) {
 				cout << "#";
 			}
@@ -53,17 +63,62 @@ void Draw() {
 		cout << "#";
 	}
 	cout << endl;
+	cout << "Score:" << score << endl;
 }
 
 void Input() {
-
+	if (_kbhit()) {
+		switch (_getch()) {
+		case 'a':
+			dir = LEFT;
+			break;
+		case 'd':
+			dir = RIGHT;
+			break;
+		case 'w':
+			dir = UP;
+			break;
+		case 's':
+			dir = DOWN;
+			break;
+		case 'x':
+			gameOver = true;
+			break;
+		}
+	}
 }
 
 void Logic() {
+	switch (dir) {
+	case LEFT:
+		x--;
+		break;
+	case RIGHT:
+		x++;
+		break;
+	case UP:
+		y--;
+		break;
+	case DOWN:
+		y++;
+		break;
+	default:
+		break;
+	}
 
+	if (x > width || x < 0 || y > height || y < 0) {
+		gameOver = true;
+	}
+
+	if (x == fruitX && y == fruitY) {
+		score += 10;
+		fruitX = rand() % width;
+		fruitY = rand() % height;
+	}
 }
 
 int main() {
+	// srand(time(NULL));
 	Setup();
 	while (!gameOver) { 
 		Draw();
